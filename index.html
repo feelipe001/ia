@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Prompt Definitivo | Ultra Realismo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #030305;
+            --neon-cyan: #00f3ff;
+            --neon-purple: #bc13fe;
+            --neon-green: #00ff66;
+            --neon-blue: #0033ff;
+            --glass-bg: rgba(10, 10, 15, 0.4);
+            --glass-border: rgba(0, 243, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(188, 19, 254, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(0, 243, 255, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* --- TIPOGRAFIA E EFEITOS DE TEXTO --- */
+        h1, h2, .cta-btn {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-blue);
+        }
+
+        .glow-text-purple {
+            text-shadow: 0 0 10px var(--neon-purple), 0 0 30px var(--neon-purple);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: heroEntrance 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            background: linear-gradient(90deg, #fff, var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.5));
+        }
+
+        .hero p {
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            color: #a0a0b0;
+            max-width: 800px;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInOut 1s ease forwards 0.8s;
+        }
+
+        /* --- BOTÕES --- */
+        .cta-btn {
+            position: relative;
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: var(--glass-bg);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3), inset 0 0 15px rgba(0, 243, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInOut 1s ease forwards 1.2s;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transform: skewX(-20deg);
+            animation: shine 3s infinite;
+        }
+
+        .cta-btn:hover {
+            box-shadow: 0 0 30px var(--neon-green), inset 0 0 20px var(--neon-green);
+            border-color: var(--neon-green);
+            color: #fff;
+            transform: translateY(-3px) scale(1.02);
+            text-shadow: 0 0 10px #fff;
+        }
+
+        /* --- GALERIA DE IMAGENS --- */
+        .gallery {
+            padding: 5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 15vh;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            border-radius: 12px;
+            padding: 10px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* Layout Alternado */
+        .gallery-item:nth-child(odd) { align-self: flex-start; }
+        .gallery-item:nth-child(even) { align-self: flex-end; }
+        
+        /* Flutuação leve constante */
+        .float-anim { animation: float 6s ease-in-out infinite; }
+        .gallery-item:nth-child(even) .float-anim { animation-delay: -3s; }
+
+        /* --- COMPONENTE ANTES/DEPOIS --- */
+        .comparison-slider {
+            position: relative;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 4/3; /* Ajuste conforme a proporção real das suas imagens */
+            cursor: ew-resize;
+        }
+
+        .comparison-slider img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .img-before {
+            z-index: 2;
+            clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+        }
+
+        .img-after {
+            z-index: 1;
+        }
+
+        .slider-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: var(--neon-cyan);
+            z-index: 3;
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px var(--neon-cyan);
+            pointer-events: none;
+        }
+
+        .slider-handle::after {
+            content: '↔';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-cyan);
+            font-size: 20px;
+            font-family: Arial, sans-serif;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .tag-label {
+            position: absolute;
+            bottom: 20px;
+            padding: 5px 15px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+            text-transform: uppercase;
+        }
+
+        .tag-before { left: 20px; border: 1px solid #ff3366; color: #ff3366; z-index: 4;}
+        .tag-after { right: 20px; border: 1px solid var(--neon-green); color: var(--neon-green); z-index: 1; text-shadow: 0 0 5px var(--neon-green);}
+
+        /* --- ANIMAÇÕES DE SCROLL (REVELAÇÃO) --- */
+        .reveal { opacity: 0; visibility: hidden; }
+        
+        .reveal.active { visibility: visible; }
+
+        .reveal.fade-glow.active {
+            animation: fadeGlow 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .reveal.slide-blur.active {
+            animation: slideBlur 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .reveal.zoom-in.active {
+            animation: zoomIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .reveal.holographic.active {
+            animation: holographicReveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* --- FINAL CTA SECTION --- */
+        .final-cta {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.1) 0%, transparent 60%);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            margin-bottom: 3rem;
+        }
+
+        .btn-large {
+            font-size: 1.5rem;
+            padding: 1.5rem 4rem;
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 30px rgba(188, 19, 254, 0.4), inset 0 0 15px rgba(188, 19, 254, 0.2);
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        .btn-large:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 50px var(--neon-cyan), inset 0 0 30px var(--neon-cyan);
+            transform: scale(1.05);
+        }
+
+        /* --- KEYFRAMES --- */
+        @keyframes heroEntrance {
+            0% { opacity: 0; transform: scale(0.85); filter: blur(10px); text-shadow: 0 0 0 transparent; }
+            100% { opacity: 1; transform: scale(1); filter: blur(0); text-shadow: 0 0 20px var(--neon-cyan); }
+        }
+
+        @keyframes fadeInOut {
+            to { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes shine {
+            100% { left: 200%; }
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.4); }
+            100% { box-shadow: 0 0 50px rgba(188, 19, 254, 0.8), 0 0 20px var(--neon-cyan); }
+        }
+
+        /* Animações de Scroll Específicas */
+        @keyframes fadeGlow {
+            0% { opacity: 0; transform: translateY(50px); filter: drop-shadow(0 0 0 transparent); }
+            100% { opacity: 1; transform: translateY(0); filter: drop-shadow(0 0 30px rgba(0, 243, 255, 0.3)); }
+        }
+
+        @keyframes slideBlur {
+            0% { opacity: 0; transform: translateX(-100px); filter: blur(20px); }
+            100% { opacity: 1; transform: translateX(0); filter: blur(0); }
+        }
+
+        @keyframes zoomIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes holographicReveal {
+            0% { opacity: 0; clip-path: inset(100% 0 0 0); filter: hue-rotate(90deg) brightness(2); }
+            100% { opacity: 1; clip-path: inset(0 0 0 0); filter: hue-rotate(0deg) brightness(1); }
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .gallery { gap: 8vh; padding: 2rem 1rem; }
+            .gallery-item:nth-child(odd), .gallery-item:nth-child(even) { align-self: center; }
+            .slider-handle::after { width: 30px; height: 30px; font-size: 14px; }
+            .tag-label { font-size: 0.7rem; padding: 3px 10px; bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <h1>Realidade<br>Absoluta</h1>
+        <p>O segredo foi revelado. Um único prompt engenhosamente construído para converter qualquer imagem em uma obra-prima cinematográfica e hiper-realista.</p>
+        <a href="#comprar" class="cta-btn">Adquirir Acesso Imediato</a>
+    </section>
+
+    <section class="gallery">
+        
+        <div class="gallery-item reveal fade-glow float-anim">
+            <div class="comparison-slider">
+                <img src="1-1.jpg" alt="Depois (Ultra Realista)" class="img-after">
+                <img src="1.jpg" alt="Antes (Original)" class="img-before">
+                <div class="slider-handle"></div>
+                <div class="tag-label tag-before">Original</div>
+                <div class="tag-label tag-after">Ultra Realista</div>
+            </div>
+        </div>
+
+        <div class="gallery-item reveal slide-blur float-anim">
+            <div class="comparison-slider">
+                <img src="2-2.jpg" alt="Depois (Ultra Realista)" class="img-after">
+                <img src="2.PNG" alt="Antes (Original)" class="img-before">
+                <div class="slider-handle"></div>
+                <div class="tag-label tag-before">Original</div>
+                <div class="tag-label tag-after">Ultra Realista</div>
+            </div>
+        </div>
+
+        <div class="gallery-item reveal zoom-in float-anim">
+            <div class="comparison-slider">
+                <img src="3-3.jpg" alt="Depois (Ultra Realista)" class="img-after">
+                <img src="3.PNG" alt="Antes (Original)" class="img-before">
+                <div class="slider-handle"></div>
+                <div class="tag-label tag-before">Original</div>
+                <div class="tag-label tag-after">Ultra Realista</div>
+            </div>
+        </div>
+
+        <div class="gallery-item reveal holographic float-anim">
+            <div class="comparison-slider">
+                <img src="4-4.jpg" alt="Depois (Ultra Realista)" class="img-after">
+                <img src="4.jpg" alt="Antes (Original)" class="img-before">
+                <div class="slider-handle"></div>
+                <div class="tag-label tag-before">Original</div>
+                <div class="tag-label tag-after">Ultra Realista</div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="final-cta" id="comprar">
+        <h2 class="glow-text">ELEVE O SEU NÍVEL HOJE</h2>
+        <a href="#" class="cta-btn btn-large">DESBLOQUEAR O PROMPT AGORA</a>
+    </section>
+
+    <script>
+        // Lógica dos Sliders Antes/Depois
+        const sliders = document.querySelectorAll('.comparison-slider');
+
+        sliders.forEach(slider => {
+            const beforeImage = slider.querySelector('.img-before');
+            const sliderHandle = slider.querySelector('.slider-handle');
+            let isDragging = false;
+
+            const moveSlider = (x) => {
+                const rect = slider.getBoundingClientRect();
+                let position = ((x - rect.left) / rect.width) * 100;
+                
+                // Limites
+                if(position < 0) position = 0;
+                if(position > 100) position = 100;
+
+                beforeImage.style.clipPath = `polygon(0 0, ${position}% 0, ${position}% 100%, 0 100%)`;
+                sliderHandle.style.left = `${position}%`;
+            };
+
+            // Mouse events
+            slider.addEventListener('mousemove', (e) => {
+                moveSlider(e.clientX);
+            });
+
+            // Touch events para mobile
+            slider.addEventListener('touchmove', (e) => {
+                moveSlider(e.touches[0].clientX);
+            }, { passive: true });
+        });
+
+        // Lógica de Animação de Scroll (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealOptions = {
+            threshold: 0.2,
+            rootMargin: "0px 0px -100px 0px"
+        };
+
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                }
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target); // Anima apenas uma vez
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            revealOnScroll.observe(el);
+        });
+    </script>
+</body>
+</html>
